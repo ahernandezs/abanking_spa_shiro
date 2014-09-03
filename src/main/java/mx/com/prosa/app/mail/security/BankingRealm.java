@@ -41,6 +41,7 @@ public class BankingRealm extends AuthorizingRealm {
 		String userID = new String(upToken.getUsername());
 		String password = new String(upToken.getPassword());
 		UserSession userSession = new UserSession();
+		String authToken = "";
 		
 	    try { 
 	        	        
@@ -62,6 +63,7 @@ public class BankingRealm extends AuthorizingRealm {
 	            throw new AuthenticationException();
 	        }
 	        	 
+	        authToken = connection.getHeaderField("X-AUTH-TOKEN");
 	        BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream())));
 	 
 	        String response="";
@@ -72,7 +74,9 @@ public class BankingRealm extends AuthorizingRealm {
             connection.disconnect();
 	            
 	        userSession = mapper.readValue(response, UserSession.class);
-	         
+	        userSession.setXbanktoken(XBANKTOKEN);
+	        userSession.setXauthtoken(authToken);
+
 	    } catch (Exception e) {
             throw new AuthenticationException(e.getMessage());
         }		

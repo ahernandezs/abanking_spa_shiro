@@ -7,6 +7,8 @@ public class UserSession {
     private String clientName;
     private Date last_access_date;
     private String last_access_media;
+    private String xbanktoken;
+    private String xauthtoken;
     
     public String getClientName() {
         return clientName;
@@ -25,6 +27,18 @@ public class UserSession {
     }
     public void setLast_access_media(String last_access_media) {
         this.last_access_media = last_access_media;
+    }
+    public String getXbanktoken() {
+        return xbanktoken;
+    }
+    public void setXbanktoken(String xbanktoken) {
+        this.xbanktoken = xbanktoken;
+    }
+    public String getXauthtoken() {
+        return xauthtoken;
+    }
+    public void setXauthtoken(String xauthtoken) {
+        this.xauthtoken = xauthtoken;
     }
 
 }
