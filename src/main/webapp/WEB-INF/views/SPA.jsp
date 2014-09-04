@@ -9,7 +9,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>@Bankin</title>
+	<title>@Banking</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width">
 	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -29,11 +29,16 @@
        ga('send', 'pageview');</script><!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/json3/lib/json3.min.js"></script>
-    <![endif]--><script src="https://cdn.pubnub.com/pubnub.min.js"></script><script src="scripts/b014f144.vendor.js"></script><script src="scripts/df346e56.scripts.js"></script>
+    <![endif]-->
+    <script src="https://cdn.pubnub.com/pubnub.min.js"></script>
+    <script src="scripts/b014f144.vendor.js"></script>
+    <script src="scripts/df346e56.scripts.js"></script>
     <script>
 
-    app.run(['api', '$rootScope', function(api, $rootScope) {
-		$rootScope.usuario = '<shiro:principal property="clientName"/>';
+    app.run(['api', '$rootScope', '$cookies', function(api, $rootScope, $cookies) {
+
+    	var session = $cookies.session;    	
+    	$rootScope.usuario = '<shiro:principal property="clientName"/>';
 		$rootScope.last_access_date = '<shiro:principal property="last_access_date"/>';
 		$rootScope.last_access_media = '<shiro:principal property="last_access_media"/>';
 		$rootScope.XBANKTOKEN = '<shiro:principal property="xbanktoken"/>';

@@ -1,6 +1,10 @@
 package mx.com.prosa.app.mail.controller;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import mx.com.prosa.app.mail.beans.LoginForm;
+import mx.com.prosa.app.mail.beans.UserSession;
 import mx.com.prosa.app.mail.services.impl.AuthenticationServiceImpl;
 
 import org.apache.shiro.SecurityUtils;
@@ -28,7 +32,7 @@ public class WebAppController {
 	}
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public String postLogin(@ModelAttribute(value = "loginForm") LoginForm loginForm, ModelMap model) {
+	public String postLogin(@ModelAttribute(value = "loginForm") LoginForm loginForm, ModelMap model, HttpServletResponse response) {
 		
 		UsernamePasswordToken token = new UsernamePasswordToken();
 		token.setUsername(loginForm.getUsername());
@@ -37,16 +41,16 @@ public class WebAppController {
 		Subject currentUser = SecurityUtils.getSubject();
 
 		try {
-			currentUser.login(token);
-		} catch (AuthenticationException ae) {
-			currentUser.logout();
-			model.addAttribute("error", true);
-			model.addAttribute("message", ae.getMessage());
-			return "login";
+			currentUser.login(token);			
+			
+			Cookie ck = new Cookie("session", currentUser.getPrincipal().toString());
+			ck.setMaxAge(-1);
+			//ck.setHttpOnly(true);
+			response.addCookie(ck);
 		} catch (Exception e) {
-		    Log.debug(e);
+		    currentUser.logout();
 			model.addAttribute("error", true);
-			model.addAttribute("errorMsg", e.getMessage());
+			model.addAttribute("errorMsg", "Error de autenticación");
 			return "login";
 		}
 		
@@ -55,6 +59,7 @@ public class WebAppController {
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(ModelMap model) {
+	    System.out.println("Saliendo...");
 		Subject currentUser = SecurityUtils.getSubject();
 		currentUser.logout();
 		model.addAttribute("loginForm", new LoginForm());
@@ -65,5 +70,5 @@ public class WebAppController {
     public String getHome(ModelMap model) {
         return "SPA";
     }
-	
+
 }

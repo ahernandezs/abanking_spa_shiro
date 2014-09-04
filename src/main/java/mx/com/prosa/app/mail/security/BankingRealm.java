@@ -71,8 +71,7 @@ public class BankingRealm extends AuthorizingRealm {
 	        while ((out = br.readLine()) != null){
 	            response += out;
 	        }
-            connection.disconnect();
-	            
+            connection.disconnect();	            
 	        userSession = mapper.readValue(response, UserSession.class);
 	        userSession.setXbanktoken(XBANKTOKEN);
 	        userSession.setXauthtoken(authToken);
